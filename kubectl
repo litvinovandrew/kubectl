@@ -1,0 +1,44 @@
+#!/bin/bash
+
+function countdown() {
+    local context="$(/usr/local/bin/kubectl_orig config current-context)"
+    
+    local parent_cmdline="$@"
+    
+    local RED=$'\e[1;31m'
+    local NC=$'\e[0m'
+    echo -n "Executing on $RED$context$NC: kubectl $parent_cmdline" >&2
+
+    echo -n '  in   ' >&2
+    for i in {9..1}; do
+        echo -n $'\b'"$i" >&2
+        sleep 1
+    done
+    echo $'\b\b\b\b\b\b      ' >&2
+    /usr/local/bin/kubectl_orig $parent_cmdline
+}
+
+#check if freese context is set
+#if not set then timer
+context="$(/usr/local/bin/kubectl_orig config current-context)"
+
+if [ -z $KUBECTL_CONTEXT_FROZEN ]; then
+  echo "K8S context is not frozen"
+  echo "Set frozen context by executing export KUBECTL_CONTEXT_FROZEN=$context"
+  #/usr/local/bin/kubectl_orig config current-context 
+  countdown "$@"
+else
+   #if variable is set 
+   # we want allow to execute command if context is changed
+   
+   wanted_context=$KUBECTL_CONTEXT_FROZEN
+      
+   if [ "$wanted_context" != "$context" ]; then
+                echo "Current context $context is not matching frozen context $wanted_context."
+                echo "Change frozen context by executing export KUBECTL_CONTEXT_FROZEN=$wanted_context"
+                exit 1
+    fi
+    
+  #/usr/local/bin/kubectl_orig config current-context
+  /usr/local/bin/kubectl_orig "$@" 
+fi
