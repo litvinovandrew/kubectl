@@ -3,10 +3,10 @@ Use this script instead of original kubeclt to avoid accidental context change.
 
 # installation
 1. move or rename original `kubectl` to the 'kubectl_orig'
-2. save current script in the `/usr/locla/bin` directory
+2. save current script in the `/usr/local/bin` directory
 ```
 cd /usr/local/bin
-sudo cp /usr/local/bin/kubectl /usr/local/bin/kubectl_orig
+sudo mv /usr/local/bin/kubectl /usr/local/bin/kubectl_orig
 curl -O https://raw.githubusercontent.com/litvinovandrew/kubectl/main/kubectl
 ```
    
