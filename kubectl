@@ -18,18 +18,16 @@ function countdown() {
     /usr/local/bin/kubectl_orig $parent_cmdline
 }
 
-#check if freese context is set
-#if not set then timer
+#check if freese context is set - if not set timer
 context="$(/usr/local/bin/kubectl_orig config current-context)"
 
 if [ -z $KUBECTL_CONTEXT_FROZEN ]; then
   echo "K8S context is not frozen"
   echo "Set frozen context by executing export KUBECTL_CONTEXT_FROZEN=$context"
-  #/usr/local/bin/kubectl_orig config current-context 
   countdown "$@"
 else
    #if variable is set 
-   # we want allow to execute command if context is changed
+   # we want to allow command execution, but only in correct context
    
    wanted_context=$KUBECTL_CONTEXT_FROZEN
       
@@ -37,8 +35,7 @@ else
                 echo "Current context $context is not matching frozen context $wanted_context."
                 echo "Change frozen context by executing export KUBECTL_CONTEXT_FROZEN=$wanted_context"
                 exit 1
-    fi
+   fi
     
-  #/usr/local/bin/kubectl_orig config current-context
-  /usr/local/bin/kubectl_orig "$@" 
+   /usr/local/bin/kubectl_orig "$@" 
 fi
