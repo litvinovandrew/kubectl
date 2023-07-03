@@ -7,7 +7,8 @@ Use this script instead of original kubeclt to avoid accidental context change.
 ```
 cd /usr/local/bin
 sudo mv /usr/local/bin/kubectl /usr/local/bin/kubectl_orig
-curl -O https://raw.githubusercontent.com/litvinovandrew/kubectl/main/kubectl
+sudo curl -O https://raw.githubusercontent.com/litvinovandrew/kubectl/main/kubectl
+sudo chmod +x /usr/local/bin/kubectl
 ```
    
 
